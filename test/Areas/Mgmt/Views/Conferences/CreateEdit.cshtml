@@ -1,0 +1,270 @@
+﻿@model test.Conference
+
+@{
+    ViewData["Title"] = "CreateEdit";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Conferences</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add/Edit</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <form asp-action="CreateEdit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.HiddenFor(x => x.Id)
+
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#tab1">اطلاعات</a></li>
+                <li><a data-toggle="tab" href="#tab2">سخنران</a></li>
+                <li><a data-toggle="tab" href="#tab3">اسپانسر</a></li>
+                <li><a data-toggle="tab" href="#tab4">شرکت کنندگان</a></li>
+                <li><a data-toggle="tab" href="#tab5">درخواست اسپانسرشیپ</a></li>
+            </ul>
+
+            <div class="tab-content">
+
+                <div id="tab1" class="tab-pane fade in active">
+                    <div class="form-group">
+                        <label asp-for="Title" class="control-label"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+
+                     <div class="form-group">
+                        <label asp-for="CityName" class="control-label"></label>
+                        <input asp-for="CityName" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="FromDateTime" class="control-label"></label>
+                        <input class="form-control" type="text" id="FromDateTime" name="FromDateTime" value="@Model.FromDateTime.ToPersian()"> 
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ToDateTime" class="control-label"></label>
+                        <input class="form-control" type="text" id="ToDateTime" name="ToDateTime" value="@Model.ToDateTime.ToPersian()">
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        @*<textarea asp-for="Description" class="form-control"></textarea>*@
+                        <TinyMce asp-for="Description"></TinyMce>                        
+                    </div>
+
+                    <div class="form-group">
+                        <input asp-for="Lat" class="form-control" type="hidden" />
+                        <input asp-for="Lng" class="form-control" type="hidden" />
+                        <link href="~/lib/leaflet/leaflet.css" rel="stylesheet" />
+                        <script src="~/lib/leaflet/leaflet.js"></script>
+                        <script src="~/js/site.js"></script>
+                        <div id="mapid" style="height: 280px; "></div>
+                        <script>
+                            var mymap = makeMap(@Model.Lat, @Model.Lng);
+                            mymap.on('click', function (e) {
+
+                                mymap.eachLayer((layer) => {
+                                    if (layer.options.id == "icon_")
+                                        layer.remove();
+                                });
+
+                                var marker = new L.marker(e.latlng, { id: 'icon_', draggable: 'true' });
+                                $('#Lat').val(e.latlng.lat);
+                                $('#Lng').val(e.latlng.lng);
+                                mymap.addLayer(marker);
+
+                            });
+                        </script>
+                    </div>
+                </div>
+
+                <div id="tab2" class="tab-pane fade">
+                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#myModal">افزودن</button>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>نام</th>
+                                <th>مدرک</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="speakersTbl">
+                            @{var i = 1; }
+                            @foreach (var item in Model.Speakers)
+                            {
+                                <tr>
+                                    <td>@(i++) <input type="hidden" value="@item.Id" name="speakers" /></td>
+                                    <td>@item.Speaker.FullName</td>
+                                    <td>@item.Speaker.Degree</td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+                <div id="tab3" class="tab-pane fade">
+                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#sponserModal">افزودن</button>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>نام</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="sponserTbl">
+                            @{ i = 1;}
+                            @foreach (var item in Model.Sponsers)
+                            {
+                                <tr>
+                                    <td>@(i++ )<input type="hidden" value="@item.Id" name="sponsers" /></td>
+                                    <td>@item.Sponser.Title</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tab4" class="tab-pane fade">   شرکت کنندگان         </div>
+                <div id="tab5" class="tab-pane fade">   درخواست اسپانسری         </div>
+            </div>
+
+
+            <div class="form-group mt-5 text-center">
+                <input type="submit" value="ذخیره" class="btn btn-primary" />
+                <a asp-action="Index">بازگشت</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>نام</th>
+                            <th>مدرک</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    @{
+                        var speakers = (List<Speaker>)ViewData["Speakers"];
+                        foreach (var item in speakers)
+                        {
+                            <tr>
+                                <td><input type="hidden" value="@item.Id" name="speakers" /></td>
+                                <td>@item.FullName</td>
+                                <td>@item.Degree</td>
+                                <td><button class="btn btn-warning" onclick="addNewSpeaker(@item.Id, '@item.FullName')">انتخاب</button></td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="sponserModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>نام</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    @{
+                        var sponsers = (List<Sponser>)ViewData["Sponsers"];
+                        foreach (var item in sponsers)
+                        {
+                            <tr>
+                                <td><input type="hidden" value="@item.Id" name="speakers" /></td>
+                                <td>@item.Title</td>
+                                <td><button class="btn btn-warning" onclick="addNewSponser(@item.Id, '@item.Title')">انتخاب</button></td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+            <div class="modal-footer ">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script>
+        $('#FromDateTime').MdPersianDateTimePicker({
+            Placement: 'top',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#FromDateTime',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: false,
+            EnglishNumber: false,
+            InLine: false
+        });
+
+        $('#ToDateTime').MdPersianDateTimePicker({
+            Placement: 'top',
+            Trigger: 'click',
+            EnableTimePicker: false,
+            TargetSelector: '#ToDateTime',
+            GroupId: '',
+            ToDate: false,
+            FromDate: false,
+            DisableBeforeToday: false,
+            Disabled: false,
+            Format: 'yyyy/MM/dd',
+            IsGregorian: false,
+            EnglishNumber: false,
+            InLine: false
+        });
+
+        var addNewSpeaker = function (id, fullName) {
+            $('#speakersTbl').append(`
+                                <tr>
+                                        <td><input type="hidden" value="${id}" name="speakers" /></td>
+                                        <td>${fullName}</td>
+                                </tr>                `);
+            //$('#myModal').modal('hide');
+        }
+
+        var addNewSponser = function (id, fullName) {
+            $('#sponserTbl').append(`
+                                <tr>
+                                        <td><input type="hidden" value="${id}" name="sponsers" /></td>
+                                        <td>${fullName}</td>
+                                </tr>`);
+            //$('#sponserModal').modal('hide');
+        }
+
+
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

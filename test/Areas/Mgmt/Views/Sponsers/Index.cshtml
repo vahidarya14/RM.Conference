@@ -1,0 +1,43 @@
+﻿@model IEnumerable<test.Sponser>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">اسپانسرها</li>
+    </ol>
+</nav>
+
+<div class="row topBar">
+    <a asp-action="CreateEdit" class="btn btn-warning">افزودن</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>  @Html.DisplayNameFor(model => model.Title)  </th>
+            <th>  @Html.DisplayNameFor(model => model.Link)   </th>
+            <th>  @Html.DisplayNameFor(model => model.Email)  </th>
+            <th>  @Html.DisplayNameFor(model => model.Phone)  </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <img class="img-responsive pull-right" src="@(!string.IsNullOrWhiteSpace(item.Logo)?$"/images/sponsors/{item.Logo}":"/images/speaker.jpg")" style="width:50px">
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>                @Html.DisplayFor(modelItem => item.Link)            </td>
+            <td>                @Html.DisplayFor(modelItem => item.Email)            </td>
+            <td>                @Html.DisplayFor(modelItem => item.Phone)            </td>
+            <td>
+                @Html.ActionLink("ویرایش", "CreateEdit", new { id=item.Id }, new { @class = "btn btn-warning" }) 
+                @Html.ActionLink("حذف", "Delete", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-danger" })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

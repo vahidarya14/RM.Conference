@@ -1,0 +1,45 @@
+﻿@model IEnumerable<test.Conference>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">همایشها</li>
+    </ol>
+</nav>
+
+<div class="row topBar" >
+    <a asp-action="CreateEdit" class = "btn btn-warning" >افزودن</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>   #      </th>
+            <th>   عنوان          </th>
+            <th>   شهر          </th>
+            <th>   شروع           </th>
+            <th>   اختتامیه           </th>
+            <th>   مختصات جغرافیایی            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td> @Html.DisplayFor(modelItem => item.Id)            </td>
+            <td> @Html.DisplayFor(modelItem => item.Title)            </td>
+            <td> @Html.DisplayFor(modelItem => item.CityName)            </td>
+            <td> @item.FromDateTime.ToPersian()            </td>
+            <td> @item.ToDateTime.ToPersian()            </td>
+            <td><span class="">@($"{item.Lng:0.00}")°N</span>,<span class="">@($"{item.Lng:0.00}")°E </span>       </td>
+            <td>
+                @Html.ActionLink("ویرایش", "CreateEdit", new { id = item.Id }, new { @class = "btn btn-warning" })
+                @Html.ActionLink("حذف", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

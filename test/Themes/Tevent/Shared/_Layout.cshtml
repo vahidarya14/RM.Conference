@@ -1,0 +1,288 @@
+﻿<html class="html">
+<head>
+    <style>
+        * {
+            direction: rtl;
+        }
+
+        li {
+            text-align: right;
+        }
+    </style>
+
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+        .dismissButton {
+            background-color: #fff;
+            border: 1px solid #dadce0;
+            color: #1a73e8;
+            border-radius: 4px;
+            font-family: Roboto,sans-serif;
+            font-size: 14px;
+            height: 36px;
+            cursor: pointer;
+            padding: 0 24px
+        }
+
+            .dismissButton:hover {
+                background-color: rgba(66,133,244,0.04);
+                border: 1px solid #d2e3fc
+            }
+
+            .dismissButton:focus {
+                background-color: rgba(66,133,244,0.12);
+                border: 1px solid #d2e3fc;
+                outline: 0
+            }
+
+                .dismissButton:focus:not(:focus-visible) {
+                    background-color: #fff;
+                    border: 1px solid #dadce0;
+                    outline: none
+                }
+
+            .dismissButton:focus-visible {
+                background-color: rgba(66,133,244,0.12);
+                border: 1px solid #d2e3fc;
+                outline: 0
+            }
+
+            .dismissButton:hover:focus {
+                background-color: rgba(66,133,244,0.16);
+                border: 1px solid #d2e2fd
+            }
+
+                .dismissButton:hover:focus:not(:focus-visible) {
+                    background-color: rgba(66,133,244,0.04);
+                    border: 1px solid #d2e3fc
+                }
+
+            .dismissButton:hover:focus-visible {
+                background-color: rgba(66,133,244,0.16);
+                border: 1px solid #d2e2fd
+            }
+
+            .dismissButton:active {
+                background-color: rgba(66,133,244,0.16);
+                border: 1px solid #d2e2fd;
+                box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3),0 1px 3px 1px rgba(60,64,67,0.15)
+            }
+
+            .dismissButton:disabled {
+                background-color: #fff;
+                border: 1px solid #f1f3f4;
+                color: #3c4043
+            }
+    </style>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="~/favicon.png">
+
+    <title>@ViewData["Title"] -همایش</title>
+
+
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/theme/tevent/bootstrap.min.css">
+    <link rel="stylesheet" href="/theme/tevent/bootsnav.css">
+    <link rel="stylesheet" href="/theme/tevent/font-awesome.min.css">
+    <link rel="stylesheet" href="/theme/tevent/style.css">
+    <link rel="stylesheet" href="/theme/tevent/owl.carousel.min.css">
+    <link rel="stylesheet" href="/theme/tevent/magnific-popup.css">
+    <link rel="stylesheet" href="/theme/tevent/animate.min.css">
+    <link rel="stylesheet" href="/theme/tevent/swiper.min.css">
+    <link rel="stylesheet" href="/theme/tevent/main.min.css">
+    <!-- endinject -->
+
+</head>
+
+<body>
+
+    <header id="header" class="Sticky headroom Sticky--stuck Sticky--not-top headroom--not-bottom Sticky--pinned">
+        <!-- Start Navigation -->
+        <nav class="navbar navbar-default navbar-fixed white bootsnav on no-full">
+
+            <div class="container">
+                <!-- Start Atribute Navigation -->
+                <div class="attr-nav">
+                    <ul>
+                        <li class="side-menu"><a href="#"><i class="fa fa-bars"></i></a></li>
+                    </ul>
+                </div>
+                <!-- End Atribute Navigation -->
+                <!-- Start Header Navigation -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <a class="navbar-brand" href="/">
+                        <img src="/theme/tevent/images/logo-light.png" class="logo logo-display" alt="">
+                        <img src="/theme/tevent/images/logo.png" class="logo logo-scrolled" alt="">
+                    </a>
+                </div>
+                <!-- End Header Navigation -->
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="nav navbar-nav navbar-right" data-in="" data-out="">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
+                                <span class="glyphicon glyphicon-home"></span>
+                                خانه
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">قوانین و مقررات</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AboutUs">درباره ما</a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                @(User.Identity.Name??"پنل کاربری")  <span class="glyphicon glyphicon glyphicon-user"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+
+                                @using Microsoft.AspNetCore.Identity
+                                @inject SignInManager<User> SignInManager
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    <li><a class="nav-link text-dark" asp-area="Mgmt" asp-controller="Settings" asp-action="Index">مدیریت</a></li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link btn btn-link text-dark" asp-controller="account" asp-action="Logout">خروج</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-controller="account" asp-action="Register">ثبت نام</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-controller="account" asp-action="login">ورود</a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div>
+
+            <!-- Start Side Menu -->
+            <div class="side">
+                <a href="#" class="close-side"><i class="fa fa-times"></i></a>
+                <div class="widget u-MarginTop50">
+                    <!--<h4 class="title">Shortlinks</h4>-->
+                    <ul class="link">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="">Schedules</a></li>
+                        <li><a href="#">Speakers</a></li>
+                        <li><a href="#">Sponsors</a></li>
+                        <li><a href="#">Venue</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Shortcodes</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="widget">
+                    <!--<h5 class="title">Social Links</h5>-->
+                    <div class="social-links sl-default border-link round-link colored-link">
+                        <a href="#" class="facebook">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="twitter">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="g-plus">
+                            <i class="fa fa-google-plus"></i>
+                        </a>
+                        <a href="#" class="youtube">
+                            <i class="fa fa-youtube"></i>
+                        </a>
+                        <a href="#" class="dribbble">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                        <a href="#" class="behance">
+                            <i class="fa fa-behance"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- End Side Menu -->
+        </nav>
+        <!-- End Navigation -->
+        <div class="clearfix"></div>
+    </header>
+
+    <div class="wrapper">
+        @if (IsSectionDefined("topBanner"))
+        { RenderSectionAsync("topBanner", required: false); }
+
+        @if (IsSectionDefined("breadCrumb"))
+        {
+            <div class="container">
+                <nav aria-label="breadcrumb" style=" border-bottom: 1px solid red; margin-top: 10px;">
+                    <ol class="breadcrumb">
+                        @await RenderSectionAsync("breadCrumb", required: false)
+                    </ol>
+                </nav>
+            </div>
+
+        }
+        @RenderBody()
+
+        <!--footer start-->
+        <footer class="bg-darker u-PaddingTop100 u-sm-PaddingTop30 u-PaddingBottom100 u-sm-PaddingBottom30 ">
+            <div class="container text-center text-sm">
+                <img class="retina u-MarginBottom50 u-sm-MarginBottom30" src="/theme/tevent/images/logo-light.png" alt="">
+                <div class="social-links sl-default light-link solid-link circle-link colored-hover">
+                    <a href="#" class="facebook">
+                        <i class="fa fa-facebook"></i>
+                    </a>
+                    <a href="#" class="twitter">
+                        <i class="fa fa-twitter"></i>
+                    </a>
+                    <a href="#" class="g-plus">
+                        <i class="fa fa-google-plus"></i>
+                    </a>
+                    <a href="#" class="youtube">
+                        <i class="fa fa-youtube"></i>
+                    </a>
+                    <a href="#" class="dribbble">
+                        <i class="fa fa-dribbble"></i>
+                    </a>
+                    <a href="#" class="behance">
+                        <i class="fa fa-behance"></i>
+                    </a>
+                </div>
+                <p class="u-MarginBottom5 u-MarginTop20"> @DateTime.Now.ToPersian2().y تمامی حقوق سایت محفوض میباشد</p>
+            </div>
+        </footer>
+        <!--footer end-->
+        <!-- inject:js -->
+        <script src="/theme/tevent/jquery-1.12.0.min.js"></script>
+        <script src="/theme/tevent/bootstrap.min.js"></script>
+        <script src="/theme/tevent/bootsnav.js"></script>
+        <script src="/theme/tevent/jquery.waypoints.min.js"></script>
+        <script src="/theme/tevent/sticky.min.js"></script>
+        <script src="/theme/tevent/headroom.min.js"></script>
+        <script src="/theme/tevent/jquery.countTo.min.js"></script>
+        <script src="/theme/tevent/owl.carousel.min.js"></script>
+        <script src="/theme/tevent/jquery.appear.js"></script>
+        <script src="/theme/tevent/isotope.pkgd.min.js"></script>
+        <script src="/theme/tevent/imagesloaded.js"></script>
+        <script src="/theme/tevent/jquery.magnific-popup.min.js"></script>
+        <script src="/theme/tevent/jquery.countdown.min.js"></script>
+        <script src="/theme/tevent/swiper.min.js"></script>
+        <script src="/theme/tevent/main.js"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+        <a href="/" class="BackToTop ScrollTo BackToTop--hide"><i class="fa fa-angle-up"></i></a>
+        <!-- endinject -->
+
+    </div>
+
+    <a href="/" class="BackToTop ScrollTo BackToTop--show"><i class="fa fa-angle-up"></i></a>
+</body>
+</html>

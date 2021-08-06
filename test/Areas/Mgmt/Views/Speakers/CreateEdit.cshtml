@@ -1,0 +1,101 @@
+﻿@model test.Speaker
+
+@{
+    ViewData["Title"] = "CreateEdit";
+}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Speakers</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add/Edit</li>
+    </ol>
+</nav>
+<h4>Speaker</h4>
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <form asp-action="CreateEdit" enctype="multipart/form-data">
+            @Html.HiddenFor(x => x.Id)
+            @Html.HiddenFor(x => x.Avatar)
+
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#tab1">اطلاعات</a></li>
+                <li><a data-toggle="tab" href="#tab2">همایشها</a></li>
+            </ul>
+
+            <div class="tab-content">
+
+                <div id="tab1" class="tab-pane fade in active">
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <img class="img-responsive" src="@(!string.IsNullOrWhiteSpace(Model.Avatar)?$"/images/speakers/{Model.Avatar}":"/images/speaker.jpg")">
+
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="form-group">
+                                <label asp-for="FullName" class="control-label"></label>
+                                <input asp-for="FullName" class="form-control" />
+                                <span asp-validation-for="FullName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Degree" class="control-label"></label>
+                                <input asp-for="Degree" class="form-control" />
+                                <span asp-validation-for="Degree" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Description" class="control-label"></label>
+                                <input asp-for="Description" class="form-control" />
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Avatar" class="control-label"></label>
+                                <input name="Logo2" id="Logo2" class="form-control" type="file" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Email" class="control-label"></label>
+                                <input asp-for="Email" class="form-control" type="email" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Phone" class="control-label"></label>
+                                <input asp-for="Phone" class="form-control" />
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+
+                <div id="tab2" class="tab-pane fade">
+                    <br />
+                    <table class="table">
+                        @foreach (var item in Model.Coferences)
+                        {
+                            <tr>
+                                <td>@item.Conference.Title</td>
+                                <td>@item.Conference.FromDateTime.ToPersian()</td>
+                                <td>@item.Conference.ToDateTime.ToPersian()</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+
+            </div>
+
+
+            <div class="form-group text-center">
+                <input type="submit" value="ذخیره" class="btn btn-warning" />
+                <a asp-action="Index">انصراف</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
