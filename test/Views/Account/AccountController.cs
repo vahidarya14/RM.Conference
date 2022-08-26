@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-
 using test.Models;
 
 namespace test.Controllers
@@ -15,12 +12,9 @@ namespace test.Controllers
 
     public class AccountController : Controller
     {
-        private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
-        public AccountController(UserManager<User> userManager,SignInManager<User> signInManager)
+        public AccountController(SignInManager<User> signInManager)
         {
-
-            this.userManager = userManager;
             this.signInManager = signInManager;
         }
 
@@ -34,7 +28,7 @@ namespace test.Controllers
 
 
         [HttpPost, AllowAnonymous]
-        public async Task<IActionResult> Register(UserRegistrationDto request)
+        public async Task<IActionResult> Register(UserRegistrationDto request, [FromServices] UserManager<User> userManager)
         {
             if (ModelState.IsValid)
             {
@@ -81,13 +75,18 @@ namespace test.Controllers
         [AllowAnonymous]
         public IActionResult Login()
         {
+            return Challenge(new AuthenticationProperties
+            {
+                RedirectUri = "/"
+            }, "oidc");
+
             UserLoginDto model = new UserLoginDto();
             return View(model);
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(UserLoginDto model)
+        public async Task<IActionResult> Login(UserLoginDto model, [FromServices] UserManager<User> userManager)
         {
             if (ModelState.IsValid)
             {
@@ -128,6 +127,12 @@ namespace test.Controllers
 
         public async Task<IActionResult> Logout()
         {
+            return SignOut(new AuthenticationProperties
+            {
+                RedirectUri = "/"
+
+            }, CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
+
             await signInManager.SignOutAsync();
             return RedirectToAction("login", "account");
         }

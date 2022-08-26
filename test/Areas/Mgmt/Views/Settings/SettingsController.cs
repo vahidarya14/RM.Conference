@@ -18,7 +18,7 @@ namespace Conference.Areas.Mgmt.Views
         public async Task<IActionResult> Index()
         {
             
-            return View(await Db.Setting.FirstOrDefaultAsync());
+            return View((await Db.Setting.FirstOrDefaultAsync()??new Setting()));
         }
 
 
@@ -26,7 +26,7 @@ namespace Conference.Areas.Mgmt.Views
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SaveAsync(Setting setting)
         {
-            var oldSetting = await Db.Setting.FirstOrDefaultAsync();
+            var oldSetting = (await Db.Setting.FirstOrDefaultAsync()??new Setting());
             oldSetting.Theme = setting.Theme;
             Db.Setting.Update(oldSetting);
             var res =await Db.SaveChangesAsync();

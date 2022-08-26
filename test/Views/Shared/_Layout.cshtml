@@ -137,10 +137,7 @@
                             @(User.Identity.Name??"پنل کاربری")  <span class="glyphicon glyphicon glyphicon-user"></span>
                             </a>
                             <ul class="dropdown-menu">
-
-                                @using Microsoft.AspNetCore.Identity
-                                @inject SignInManager<User> SignInManager
-                                @if (SignInManager.IsSignedIn(User))
+                                @if (User.Identity.IsAuthenticated)
                                 {
                                     <li><a class="nav-link text-dark" asp-area="Mgmt" asp-controller="Settings" asp-action="Index">مدیریت</a></li>
 
