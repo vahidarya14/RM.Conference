@@ -22,6 +22,11 @@ namespace test.Controllers
         [HttpGet, AllowAnonymous]
         public IActionResult Register()
         {
+            return Challenge(new AuthenticationProperties
+            {
+                RedirectUri = "/"
+            }, "oidc");
+
             UserRegistrationDto model = new UserRegistrationDto();
             return View(model);
         }
